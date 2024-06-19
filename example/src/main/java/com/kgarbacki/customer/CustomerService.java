@@ -15,7 +15,7 @@ public class CustomerService {
 
     private final CustomerDao customerDao;
 
-    public CustomerService(@Qualifier("jpa") CustomerDao customerDao) {
+    public CustomerService(@Qualifier("jdbc") CustomerDao customerDao) {
         this.customerDao = customerDao;
     }
 
@@ -23,9 +23,9 @@ public class CustomerService {
         return customerDao.selectAllCustomers();
     }
 
-    public Customer getCustomer(Long id){
-        return customerDao.selectCustomerById(id)
-                .orElseThrow(() ->  new ResourceNotFoundException("Customer with Id: " + id + "does not exist"));
+    public Customer getCustomer(Long customerId){
+        return customerDao.selectCustomerById(customerId)
+                .orElseThrow(() ->  new ResourceNotFoundException("customer with id [%s] not found".formatted(customerId)));
     }
 
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest){
