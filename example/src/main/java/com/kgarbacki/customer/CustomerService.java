@@ -5,8 +5,6 @@ import com.kgarbacki.exception.RequestValidationException;
 import com.kgarbacki.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -28,9 +26,9 @@ public class CustomerService {
                 .orElseThrow(() ->  new ResourceNotFoundException("customer with id [%s] not found".formatted(customerId)));
     }
 
-    public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest){
+    public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
         String email = customerRegistrationRequest.email();
-        if(customerDao.existsPersonWithEmail(email)){
+        if (customerDao.existsPersonWithEmail(email)) {
             throw new DuplicateResourceExeption(
                     "Email already taken"
             );

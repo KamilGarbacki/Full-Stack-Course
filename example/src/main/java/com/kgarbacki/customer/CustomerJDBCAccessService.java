@@ -1,10 +1,8 @@
 package com.kgarbacki.customer;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +12,9 @@ public class CustomerJDBCAccessService implements CustomerDao{
     private final JdbcTemplate jdbcTemplate;
     private final CustomerRowMapper customerRowMapper;
 
-    public CustomerJDBCAccessService(JdbcTemplate jdbcTemplate) {
+    public CustomerJDBCAccessService(JdbcTemplate jdbcTemplate, CustomerRowMapper customerRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
-        customerRowMapper = new CustomerRowMapper();
+        this.customerRowMapper = customerRowMapper;
     }
 
     @Override
