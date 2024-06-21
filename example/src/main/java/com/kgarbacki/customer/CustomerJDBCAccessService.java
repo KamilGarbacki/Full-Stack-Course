@@ -46,13 +46,13 @@ public class CustomerJDBCAccessService implements CustomerDao{
     }
 
     @Override
-    public boolean existsPersonWithEmail(String email) {
+    public boolean existsCustomerWithEmail(String email) {
         var sql = "SELECT count(id) FROM customer WHERE email = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, email) > 0;
     }
 
     @Override
-    public boolean existsPersonWithId(Long customerId) {
+    public boolean existsCustomerWithId(Long customerId) {
         var sql = "SELECT count(id) FROM customer WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, customerId) > 0;
     }

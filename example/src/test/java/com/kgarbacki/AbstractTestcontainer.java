@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 
 @Testcontainers
 public abstract class AbstractTestcontainer {
+
     protected static final Faker FAKER = new Faker();
 
     @BeforeAll

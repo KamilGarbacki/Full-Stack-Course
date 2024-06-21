@@ -20,8 +20,8 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}")
-    public Customer getCustomer(@PathVariable("customerId") Long customerId) {
-        return customerService.getCustomer(customerId);
+    public Customer getCustomerById(@PathVariable("customerId") Long customerId) {
+        return customerService.getCustomerById(customerId);
     }
 
     @PostMapping

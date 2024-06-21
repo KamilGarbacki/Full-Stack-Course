@@ -1,6 +1,6 @@
 package com.kgarbacki.customer;
 
-import com.kgarbacki.exception.DuplicateResourceExeption;
+import com.kgarbacki.exception.DuplicateResourceException;
 import com.kgarbacki.exception.RequestValidationException;
 import com.kgarbacki.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,15 +21,15 @@ public class CustomerService {
         return customerDao.selectAllCustomers();
     }
 
-    public Customer getCustomer(Long customerId){
+    public Customer getCustomerById(Long customerId){
         return customerDao.selectCustomerById(customerId)
                 .orElseThrow(() ->  new ResourceNotFoundException("customer with id [%s] not found".formatted(customerId)));
     }
 
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
         String email = customerRegistrationRequest.email();
-        if (customerDao.existsPersonWithEmail(email)) {
-            throw new DuplicateResourceExeption(
+        if (customerDao.existsCustomerWithEmail(email)) {
+            throw new DuplicateResourceException(
                     "Email already taken"
             );
         }
@@ -44,7 +44,7 @@ public class CustomerService {
     }
 
     public void deleteCustomerById(Long customerId) {
-        if (!customerDao.existsPersonWithId(customerId)) {
+        if (!customerDao.existsCustomerWithId(customerId)) {
             throw new ResourceNotFoundException(
                     "customer with id [%s] not found".formatted(customerId)
             );
@@ -55,7 +55,11 @@ public class CustomerService {
 
     public void updateCustomer(Long customerId,
                                CustomerUpdateRequest request) {
-        Customer customer = getCustomer(customerId);
+
+        Customer customer = customerDao.selectCustomerById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "customer with id [%s] not found".formatted(customerId)
+                ));
 
         boolean changes = false;
 
@@ -64,6 +68,12 @@ public class CustomerService {
             changes = true;
         }
         if(request.email() != null && !request.email().equals(customer.getEmail())){
+            if(customerDao.existsCustomerWithEmail(request.email())) {
+                throw new DuplicateResourceException(
+                        "email already taken"
+                );
+            }
+
             customer.setEmail(request.email());
             changes = true;
         }
