@@ -1,10 +1,10 @@
 services:
   db:
     container_name: postgres_test
-    image: postgres
+    image: postgres:15.1
     environment:
       POSTGRES_USER: kamil
-      POSTGRES_PASSWORD: 123
+      POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
