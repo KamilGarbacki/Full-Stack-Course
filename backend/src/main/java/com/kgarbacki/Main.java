@@ -27,6 +27,7 @@ public class Main {
 //            List<Customer> customers = List.of(alex, jamila);
 //            customerRepository.saveAll(customers);
             // new comment
+            //hopefully fucking last im so done
 
             Faker faker = new Faker();
             Random random = new Random();
