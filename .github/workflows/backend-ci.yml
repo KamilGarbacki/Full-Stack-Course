@@ -32,4 +32,4 @@ jobs:
           java-version: '17'
           cache: 'maven'
       - name: Build and run Unit/Integration Tests with maven
-        run: ./mvnw -ntp -B verify
+        run: mvn -ntp -B verify
