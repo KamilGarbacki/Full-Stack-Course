@@ -16,6 +16,7 @@ public class Main {
 
         SpringApplication.run(Main.class, args);
         //...
+        //new comment :)
     }
 
     @Bean
