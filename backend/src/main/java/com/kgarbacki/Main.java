@@ -7,14 +7,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
 import java.util.Random;
 
 @SpringBootApplication
 public class Main {
 
     public static void main(String[] args) {
+
         SpringApplication.run(Main.class, args);
+        //...
     }
 
     @Bean
@@ -25,6 +26,7 @@ public class Main {
 //
 //            List<Customer> customers = List.of(alex, jamila);
 //            customerRepository.saveAll(customers);
+            // new comment
 
             Faker faker = new Faker();
             Random random = new Random();
