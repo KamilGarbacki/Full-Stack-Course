@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "kgarbacki-api",
-      "image": "kamilgarbacki/kgarbacki-api:latest",
+      "image": "kamilgarbacki/kgarbacki-api:08.07.2024.11.53.21",
       "essential": true,
       "memory": 512,
       "portMappings": [
