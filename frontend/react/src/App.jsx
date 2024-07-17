@@ -50,13 +50,16 @@ const App = () => {
   return (
     <SidebarWithHeader>
         <Wrap justify={"center"} spacing={"30px"}>
-            {customers.map((customer, index) => (
-                <WrapItem key={index}>
-                    <CardWithImage
-                        {...customer}
-                    ></CardWithImage>
-                </WrapItem>
-            ))}
+            {customers.map((customer, index) => {
+                return(
+                    <WrapItem key={index}>
+                        <CardWithImage
+                            {...customer}
+                            imageNumber = {index}
+                        ></CardWithImage>
+                    </WrapItem>
+                );
+            })}
         </Wrap>
 
     </SidebarWithHeader>

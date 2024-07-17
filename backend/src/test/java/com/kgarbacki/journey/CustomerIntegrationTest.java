@@ -5,6 +5,7 @@ import com.kgarbacki.AbstractTestcontainer;
 import com.kgarbacki.customer.Customer;
 import com.kgarbacki.customer.CustomerRegistrationRequest;
 import com.kgarbacki.customer.CustomerUpdateRequest;
+import com.kgarbacki.customer.Gender;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,7 +38,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
         int age = RANDOM.nextInt(16, 100) ;
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-            name, email, age
+            name, email, age, Gender.MALE
         );
         //send a post request
         webTestClient.post()
@@ -62,8 +63,8 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
                 .getResponseBody();
 
         Customer expectedCustomer = new Customer(
-                request.name(), request.email(), request.age()
-        );
+                request.name(), request.email(), request.age(),
+                Gender.MALE);
 
         //make sure that customer is present
         assertThat(allCustomers)
@@ -96,7 +97,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
         int age = RANDOM.nextInt(16, 100) ;
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email, age
+                name, email, age, Gender.MALE
         );
         webTestClient.post()
                 .uri(CUSTOMER_URI)
@@ -148,7 +149,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
         int age = RANDOM.nextInt(16, 100) ;
 
         CustomerRegistrationRequest registrationRequest = new CustomerRegistrationRequest(
-                name, email, age
+                name, email, age, Gender.MALE
         );
 
         webTestClient.post()
@@ -179,7 +180,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
                 .orElseThrow();
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                "kamil", "kamil05@gmail.com", 21
+                "kamil", "kamil05@gmail.com", 21, Gender.MALE
         );
 
         webTestClient.patch()
@@ -192,8 +193,8 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
                 .isOk();
 
         Customer expectedCustomer = new Customer(
-                id, updateRequest.name(), updateRequest.email(), updateRequest.age()
-        );
+                id, updateRequest.name(), updateRequest.email(), updateRequest.age(),
+                Gender.MALE);
 
         webTestClient.get()
                 .uri(CUSTOMER_URI + "/{id}", id)
