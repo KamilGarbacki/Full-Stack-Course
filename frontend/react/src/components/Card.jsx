@@ -1,17 +1,20 @@
 import {
-    Heading,
     Avatar,
-    Box,
+    Box, Button,
     Center,
-    Image,
     Flex,
-    Text,
+    Heading,
+    Image,
     Stack,
     Tag,
-    useColorModeValue,
+    Text,
+    useColorModeValue
 } from '@chakra-ui/react';
+import React from "react";
+import {ConfirmationPopUp} from "./AlterDialog.jsx";
+import EditCustomerDrawerForm from "./EditCustomerDrawer.jsx";
 
-export default function CardWithImage({id, name, email, age, gender, imageNumber}) {
+export default function CardWithImage({id, name, email, age, gender, imageNumber, fetchCustomers}) {
     const randomUserGander = gender === "MALE" ? "men" : "women";
     return (
         <Center py={6}>
@@ -51,6 +54,9 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
                         </Heading>
                         <Text color={'gray.500'}>{email}</Text>
                         <Text color={'gray.500'}>Age {age} | {gender.toLowerCase()}</Text>
+                        <EditCustomerDrawerForm initialValues={{id, name, email, age}} fetchCustomers={fetchCustomers}/>
+                        <ConfirmationPopUp customerId={id} fetchCustomers={fetchCustomers}/>
+
                     </Stack>
                 </Box>
             </Box>
