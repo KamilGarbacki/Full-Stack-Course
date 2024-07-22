@@ -50,6 +50,7 @@ jobs:
 
       - name: Update Dockerrun.aws.json api image tag with new build number
         run: |
+          ls
           echo "Dockerrun.aws.json before updating tag"
           cat Full-Stack-Course/Dockerrun.aws.json
           sed -i -E 's_(kamilgarbacki/kgarbacki-react:)([^"]*)_\1'${{steps.build-number.outputs.BUILD_NUMBER}}'_' Full-Stack-Course/Dockerrun.aws.json
