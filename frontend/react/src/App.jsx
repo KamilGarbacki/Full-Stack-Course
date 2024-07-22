@@ -22,7 +22,6 @@ const App = () => {
         getCustomers().then(res => {
             setCustomers(res.data)
         }).catch(err => {
-            console.log(err);
             setError(err.response.data.message)
             errorNotification(
                 err.code,
