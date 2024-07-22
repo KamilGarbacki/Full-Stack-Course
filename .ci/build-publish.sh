@@ -1,6 +1,6 @@
 : "${USERNAME:?USERNAME not set or empty}"
 : "${REPO:?REPO not set or empty}"
-: "${TaG:?TAG not set or empty}"
+: "${TAG:?TAG not set or empty}"
 
 docker buildx create -use
 
