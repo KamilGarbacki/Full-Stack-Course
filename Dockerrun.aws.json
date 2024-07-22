@@ -17,7 +17,7 @@
       "name": "kgarbacki-api",
       "image": "kamilgarbacki/kgarbacki-api:17.07.2024.20.54.03",
       "essential": true,
-      "memory": 512,
+      "memory": 256,
       "portMappings": [
         {
           "hostPort": 8080,
