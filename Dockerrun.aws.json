@@ -15,7 +15,7 @@
     },
     {
       "name": "kgarbacki-api",
-      "image": "kamilgarbacki/kgarbacki-api:27.07.2024.23.10.19",
+      "image": "kamilgarbacki/kgarbacki-api:27.07.2024.23.53.30",
       "essential": true,
       "memory": 256,
       "portMappings": [
