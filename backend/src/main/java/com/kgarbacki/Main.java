@@ -8,7 +8,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.Random;
+import java.util.UUID;
 
 @SpringBootApplication
 public class Main {
@@ -20,7 +23,7 @@ public class Main {
     }
 
     @Bean
-    CommandLineRunner runner(CustomerRepository customerRepository){
+    CommandLineRunner runner(CustomerRepository customerRepository, PasswordEncoder passwordEncoder){
         return args -> {
             Faker faker = new Faker();
             Random random = new Random();
@@ -30,7 +33,7 @@ public class Main {
             String email = name.toLowerCase() + age + "@gmail.com";
             Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
-            Customer customer = new Customer(name, email, age, gender);
+            Customer customer = new Customer(name, email, passwordEncoder.encode(UUID.randomUUID().toString()), age, gender);
             customerRepository.save(customer);
         };
     }

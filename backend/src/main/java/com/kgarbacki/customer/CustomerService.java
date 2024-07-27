@@ -4,26 +4,40 @@ import com.kgarbacki.exception.DuplicateResourceException;
 import com.kgarbacki.exception.RequestValidationException;
 import com.kgarbacki.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class CustomerService {
 
     private final CustomerDao customerDao;
+    private final CustomerDTOMapper customerDTOMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public CustomerService(@Qualifier("jdbc") CustomerDao customerDao) {
+    public CustomerService(@Qualifier("jdbc") CustomerDao customerDao, PasswordEncoder passwordEncoder, CustomerDTOMapper customerDTOMapper) {
         this.customerDao = customerDao;
+        this.passwordEncoder = passwordEncoder;
+        this.customerDTOMapper = customerDTOMapper;
     }
 
-    public List<Customer> getAllCustomers(){
-        return customerDao.selectAllCustomers();
+    public List<CustomerDTO> getAllCustomers(){
+
+        return customerDao.selectAllCustomers()
+                .stream()
+                .map(customerDTOMapper)
+                .collect(Collectors.toList());
     }
 
-    public Customer getCustomerById(Long customerId){
+    public CustomerDTO getCustomerById(Long customerId){
         return customerDao.selectCustomerById(customerId)
-                .orElseThrow(() ->  new ResourceNotFoundException("customer with id [%s] not found".formatted(customerId)));
+                .map(customerDTOMapper)
+                .orElseThrow(
+                        () ->  new ResourceNotFoundException("customer with id [%s] not found".formatted(customerId))
+                );
     }
 
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
@@ -37,6 +51,7 @@ public class CustomerService {
         Customer newCustomer = new Customer(
                 customerRegistrationRequest.name(),
                 customerRegistrationRequest.email(),
+                passwordEncoder.encode(customerRegistrationRequest.password()),
                 customerRegistrationRequest.age(),
                 customerRegistrationRequest.gender()
         );

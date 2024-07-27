@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -21,11 +22,15 @@ class CustomerServiceTest {
 
     @Mock
     private CustomerDao customerDao;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     private CustomerService underTest;
+    private final CustomerDTOMapper customerDTOMapper = new CustomerDTOMapper();
 
     @BeforeEach
     void setUp() {
-        underTest = new CustomerService(customerDao);
+        underTest = new CustomerService(customerDao, passwordEncoder, customerDTOMapper);
+
     }
 
     @Test
@@ -39,13 +44,15 @@ class CustomerServiceTest {
     void canGetCustomerById() {
         Long id = 10L;
         Customer customer = new Customer(
-                id, "kamil", "kamil@gmail.com", 21,
+                id, "kamil", "kamil@gmail.com", "password", 21,
                 Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
-        Customer actual = underTest.getCustomerById(id);
+        CustomerDTO expected = customerDTOMapper.apply(customer);
 
-        assertThat(actual).isEqualTo(customer);
+        CustomerDTO actual = underTest.getCustomerById(id);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -65,8 +72,12 @@ class CustomerServiceTest {
 
         when(customerDao.existsCustomerWithEmail(email)).thenReturn(false);
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                "kamil", email, 21, Gender.MALE
+                "kamil", email, "password", 21, Gender.MALE
         );
+        String passwordHash = "fqgfeim32ingt4oiknt2pi3n5in2mt";
+
+        when(passwordEncoder.encode("password")).thenReturn(passwordHash);
+
         underTest.addCustomer(request);
 
         ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(
@@ -80,6 +91,7 @@ class CustomerServiceTest {
         assertThat(captureCustomer.getId()).isNull();
         assertThat(captureCustomer.getName()).isEqualTo(request.name());
         assertThat(captureCustomer.getEmail()).isEqualTo(request.email());
+        assertThat(captureCustomer.getPassword()).isEqualTo(passwordHash);
         assertThat(captureCustomer.getAge()).isEqualTo(request.age());
     }
 
@@ -89,7 +101,7 @@ class CustomerServiceTest {
 
         when(customerDao.existsCustomerWithEmail(email)).thenReturn(true);
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                "kamil", email, 21, Gender.MALE
+                "kamil", email, "password", 21, Gender.MALE
         );
         assertThatThrownBy(()-> underTest.addCustomer(request))
                 .isInstanceOf(DuplicateResourceException.class)
@@ -126,7 +138,7 @@ class CustomerServiceTest {
     void canUpdateAllCustomerProperties() {
         Long id = 10L;
         Customer customer = new Customer(
-                id, "Kamil", "kamil@gmail.com", 19,
+                id, "Kamil", "kamil@gmail.com", "password", 19,
                 Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
@@ -156,7 +168,7 @@ class CustomerServiceTest {
     void canUpdateOnlyCustomerName() {
         Long id = 10L;
         Customer customer = new Customer(
-                id, "kamil", "kamil@gmail.com", 19,
+                id, "kamil", "kamil@gmail.com", "password", 19,
                 Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
@@ -183,7 +195,7 @@ class CustomerServiceTest {
     void canUpdateOnlyCustomerEmail() {
         Long id = 10L;
         Customer customer = new Customer(
-                id, "kamil", "kamil@gmail.com", 19,
+                id, "kamil", "kamil@gmail.com", "password", 19,
                 Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
@@ -214,7 +226,7 @@ class CustomerServiceTest {
     void canUpdateOnlyCustomerAge() {
         Long id = 10L;
         Customer customer = new Customer(
-                id, "kamil", "kamil@gmail.com", 19,
+                id, "kamil", "kamil@gmail.com", "password", 19,
                 Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
@@ -241,7 +253,7 @@ class CustomerServiceTest {
     void willThrowWhenTryingToUpdateCustomerEmailWhenEmailAlreadyTaken() {
         Long id = 10L;
         Customer customer = new Customer(
-                id, "kamil", "kamil@gmail.com", 19,
+                id, "kamil", "kamil@gmail.com", "password", 19,
                 Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
@@ -264,7 +276,7 @@ class CustomerServiceTest {
     void willThrowWhenCustomerUpdateHasNoChanges() {
         Long id = 10L;
         Customer customer = new Customer(
-                id, "Kamil", "kamil@gmail.com", 19,
+                id, "Kamil", "kamil@gmail.com", "password", 19,
                 Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
