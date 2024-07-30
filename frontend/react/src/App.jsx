@@ -7,8 +7,8 @@ import SidebarWithHeader from "./components/shared/Sidebar"
 import { useEffect,
          useState } from "react";
 import {getCustomers} from "./services/client.js";
-import CardWithImage from "./components/Card.jsx";
-import CreateCustomerDrawer from "./components/CreateCustomerDrawer.jsx";
+import CardWithImage from "./components/customer/Card.jsx";
+import CreateCustomerDrawer from "./components/customer/CreateCustomerDrawer.jsx";
 import {errorNotification} from "./services/notification.js";
 
 const App = () => {
@@ -43,7 +43,7 @@ const App = () => {
                 <CreateCustomerDrawer
                     fetchCustomers={fetchCustomers}
                 />
-                <Text mt={5}Ooops there was an error></Text>
+                <Text mt={5}>Ooops there was an error</Text>
             </SidebarWithHeader>
         )
     }

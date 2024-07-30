@@ -1,24 +1,10 @@
 import {Form, Formik, useField} from 'formik';
 import * as Yup from 'yup';
 import {Alert, AlertIcon, Box, Button, FormLabel, Input, Select, Stack} from "@chakra-ui/react";
-import {saveCustomer} from "../services/client.js";
-import {successNotification, errorNotification} from "../services/notification.js";
+import {saveCustomer} from "../../services/client.js";
+import {successNotification, errorNotification} from "../../services/notification.js";
+import TextInput from "../shared/TextInput.jsx";
 
-const MyTextInput = ({label, ...props}) => {
-    const [field, meta] = useField(props);
-    return (
-        <Box>
-            <FormLabel htmlFor={props.id || props.name}>{label}</FormLabel>
-            <Input className="text-input" {...field} {...props} />
-            {meta.touched && meta.error ? (
-                <Alert className="error" status={"error"} mt={2}>
-                    <AlertIcon/>
-                    {meta.error}
-                </Alert>
-            ) : null}
-        </Box>
-    );
-};
 
 const MySelect = ({label, ...props}) => {
     const [field, meta] = useField(props);
@@ -46,6 +32,7 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                     email: '',
                     age: 0,
                     gender: '',
+                    password: '',
                 }}
                 validationSchema={Yup.object({
                     name: Yup.string()
@@ -55,9 +42,13 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                         .email('This is not an email')
                         .required('Required'),
                     age: Yup.number()
-                        .min(16, 'Must be at least 16 years of age')
-                        .max(100, 'Must be less than 100 years of age')
+                        .min(8, 'Must be at least 16 years of age')
+                        .max(15, 'Must be less than 100 years of age')
                         .required(),
+                    password: Yup.string()
+                        .min(8, 'Must be between 8 to 15 characters long')
+                        .max(15, 'Must be between 8 to 15 characters long')
+                        .required('Required'),
                     gender: Yup.string()
                         .oneOf(
                             ['MALE', 'FEMALE'],
@@ -89,25 +80,31 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                 {({isValid, isSubmitting}) => (
                     <Form>
                         <Stack spacing={"24px"}>
-                            <MyTextInput
+                            <TextInput
                                 label="Name"
                                 name="name"
                                 type="text"
                                 placeholder="Jane"
                             />
 
-                            <MyTextInput
+                            <TextInput
                                 label="Email Address"
                                 name="email"
                                 type="email"
                                 placeholder="jane@formik.com"
                             />
 
-                            <MyTextInput
+                            <TextInput
                                 label="Age"
                                 name="age"
                                 type="number"
                                 placeholder="20"
+                            />
+
+                            <TextInput
+                                label="Password"
+                                name="password"
+                                type="password"
                             />
 
                             <MySelect label="Gender" name="gender">

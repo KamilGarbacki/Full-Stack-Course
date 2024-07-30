@@ -18,7 +18,7 @@ public class AuthenticationController {
     }
 
 
-    //to ma być get ppamiętaj
+    //to ma być get pamiętaj
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) {
         AuthenticationResponse response = authenticationService.login(request);
