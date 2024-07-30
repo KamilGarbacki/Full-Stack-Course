@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "kgarbacki-react",
-      "image": "kamilgarbacki/kgarbacki-react:23.07.2024.00.16.41",
+      "image": "kamilgarbacki/kgarbacki-react:30.07.2024.22.29.14",
       "essential": true,
       "memory": 256,
       "portMappings": [
