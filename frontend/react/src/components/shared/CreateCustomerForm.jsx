@@ -1,9 +1,9 @@
 import {Form, Formik, useField} from 'formik';
 import * as Yup from 'yup';
-import {Alert, AlertIcon, Box, Button, FormLabel, Input, Select, Stack} from "@chakra-ui/react";
+import {Alert, AlertIcon, Box, Button, FormLabel, Select, Stack} from "@chakra-ui/react";
 import {saveCustomer} from "../../services/client.js";
-import {successNotification, errorNotification} from "../../services/notification.js";
-import TextInput from "../shared/TextInput.jsx";
+import {errorNotification} from "../../services/notification.js";
+import TextInput from "./TextInput.jsx";
 
 
 const MySelect = ({label, ...props}) => {
@@ -23,7 +23,7 @@ const MySelect = ({label, ...props}) => {
 };
 
 // And now we can use these
-const CreateCustomerForm = ({ fetchCustomers }) => {
+const CreateCustomerForm = ({ onSuccess }) => {
     return (
         <>
             <Formik
@@ -42,8 +42,8 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                         .email('This is not an email')
                         .required('Required'),
                     age: Yup.number()
-                        .min(8, 'Must be at least 16 years of age')
-                        .max(15, 'Must be less than 100 years of age')
+                        .min(16, 'Must be at least 16 years of age')
+                        .max(100, 'Must be less than 100 years of age')
                         .required(),
                     password: Yup.string()
                         .min(8, 'Must be between 8 to 15 characters long')
@@ -59,13 +59,8 @@ const CreateCustomerForm = ({ fetchCustomers }) => {
                 onSubmit={(customer, {setSubmitting}) => {
                     setSubmitting(true);
                     saveCustomer(customer)
-                        .then(res => {
-                            console.log(res);
-                            successNotification(
-                                "Customer saved",
-                                `${customer.name} was successfully saved`
-                            )
-                            fetchCustomers();
+                        .then(() => {
+                            onSuccess(customer);
                         }).catch(err => {
                         console.log(err);
                         errorNotification(

@@ -16,7 +16,7 @@ import {useEffect} from "react";
 
 const LoginForm = () => {
 
-    const { login, logOut } = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     return (
@@ -38,9 +38,8 @@ const LoginForm = () => {
             initialValues={{username: '', password: ''}}
             onSubmit={(values, {setSubmitting})=>{
                 setSubmitting(true);
-                login(values).then(res => {
+                login(values).then(() => {
                     navigate("/dashboard")
-                    console.log("Successfully logged in");
                 }).catch(err => {
                     errorNotification(
                         err.code,
@@ -60,6 +59,7 @@ const LoginForm = () => {
                             type={"email"}
                             placeholder={"email"}
                         />
+
                         <TextInput
                             label={"Password"}
                             name={"password"}
@@ -102,6 +102,9 @@ const Login = () => {
                     />
                     <Heading fontSize={'2xl'} mb={6}>Sign in to your account</Heading>
                     <LoginForm />
+                    <Link onClick={()=>{ navigate("/register") }}>
+                        Don't have an account? Register here!
+                    </Link>
                 </Stack>
             </Flex>
             <Flex flex={1}

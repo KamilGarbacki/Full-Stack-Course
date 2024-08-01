@@ -7,7 +7,8 @@ import {
     DrawerOverlay,
     useDisclosure
 } from "@chakra-ui/react";
-import CreateCustomerForm from "./CreateCustomerForm.jsx";
+import CreateCustomerForm from "../shared/CreateCustomerForm.jsx";
+import {successNotification} from "../../services/notification.js";
 
 const AddIcon = () => "+";
 const CloseIcon = () => "x";
@@ -31,7 +32,13 @@ const CreateCustomerDrawer = ({fetchCustomers}) => {
 
                 <DrawerBody>
                     <CreateCustomerForm
-                        fetchCustomers={fetchCustomers}
+                        onSuccess={(customer)=>{
+                            successNotification(
+                                "Customer saved",
+                                `${customer.name} was successfully saved`
+                            )
+                            fetchCustomers();
+                        }}
                     />
                 </DrawerBody>
 

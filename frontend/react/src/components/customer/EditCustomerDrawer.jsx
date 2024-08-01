@@ -6,7 +6,7 @@ import {
     DrawerHeader,
     DrawerOverlay,
     useDisclosure
-} from "@chakra-ui/react";;
+} from "@chakra-ui/react";
 import {EditCustomerForm} from "./EditCustomerForm.jsx";
 
 
