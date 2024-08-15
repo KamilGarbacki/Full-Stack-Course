@@ -47,10 +47,15 @@ public class SecurityFilterChainConfig {
                     .requestMatchers(
                             HttpMethod.GET,
                             "/ping"
-                    )
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
+                  )
+                  .permitAll()
+                  .requestMatchers(
+                            HttpMethod.GET,
+                            "/actuator/**"
+                  )
+                  .permitAll()
+                  .anyRequest()
+                  .authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(

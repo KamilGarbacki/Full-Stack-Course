@@ -2,25 +2,13 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "kgarbacki-react",
-      "image": "kamilgarbacki/kgarbacki-react:01.08.2024.15.29.47",
-      "essential": true,
-      "memory": 256,
-      "portMappings": [
-        {
-          "hostPort": 80,
-          "containerPort": 5173
-        }
-      ]
-    },
-    {
       "name": "kgarbacki-api",
       "image": "kamilgarbacki/kgarbacki-api:27.07.2024.23.53.30",
       "essential": true,
       "memory": 256,
       "portMappings": [
         {
-          "hostPort": 8080,
+          "hostPort": 80,
           "containerPort": 8080
         }
       ],
@@ -28,7 +16,7 @@
       "environment": [
         {
           "name": "SPRING_DATASOURCE_URL",
-          "value": "jdbc:postgresql://awseb-e-mpktph4mi2-stack-awsebrdsdatabase-v9osxn3gbuur.cx6wsoeaqf8l.eu-north-1.rds.amazonaws.com:5432/customer"
+          "value": "jdbc:postgresql://awseb-e-rw9samzb2i-stack-awsebrdsdatabase-wbkmg3uewnsl.chs4aii4k16t.us-east-1.rds.amazonaws.com:5432/ebdb"
         }
       ]
     }
