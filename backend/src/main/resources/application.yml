@@ -1,4 +1,6 @@
 server:
+  tomcat:
+    keep-alive-timeout: 65000
   port: 8080
   error:
     include-message: always
