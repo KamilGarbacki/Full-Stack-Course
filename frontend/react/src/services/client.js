@@ -9,7 +9,7 @@ const getAuthConfig = () => ({
 export const getCustomers = async () =>{
     try{
         return await axios.get(
-            `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers`,
+            `https://${import.meta.env.VITE_API_BASE_URL}/api/v1/customers`,
             getAuthConfig()
         );
     } catch (e){
@@ -20,7 +20,7 @@ export const getCustomers = async () =>{
 export const saveCustomer = async (customer) => {
     try{
         return await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers`,
+            `https://${import.meta.env.VITE_API_BASE_URL}/api/v1/customers`,
             customer
         )
     } catch (e) {
@@ -31,7 +31,7 @@ export const saveCustomer = async (customer) => {
 export const deleteCustomer = async (id) => {
     try{
         return await axios.delete(
-            `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${id}`,
+            `https://${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${id}`,
             getAuthConfig()
         )
 
@@ -43,7 +43,7 @@ export const deleteCustomer = async (id) => {
 export const editCustomer = async (id, newCustomer) => {
     try{
         return await axios.patch(
-            `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${id}`,
+            `https://${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${id}`,
             newCustomer,
             getAuthConfig()
         )
@@ -55,7 +55,7 @@ export const editCustomer = async (id, newCustomer) => {
 export const login = async (usernameAndPassword) => {
     try {
         return await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/login`,
+             `https://${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/login`,
             usernameAndPassword
         )
     } catch (e) {
