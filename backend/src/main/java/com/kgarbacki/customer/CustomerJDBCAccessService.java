@@ -20,7 +20,7 @@ public class CustomerJDBCAccessService implements CustomerDao{
     @Override
     public List<Customer> selectAllCustomers() {
 
-        var sql = "SELECT id, name, email, password, age, gender FROM customer";
+        var sql = "SELECT id, name, email, password, age, gender FROM customer LIMIT 100";
 
         List<Customer> customers = jdbcTemplate.query(sql, customerRowMapper);
 

@@ -1,0 +1,5 @@
+<input type="text" [(ngModel)]="inputValue">
+<button (click)="clickMe()">Click me</button>
+<p *ngIf="inputValue.length >= 8"> Your name is : {{ inputValue }}</p>
+
+<p *ngFor="let element of msgList">{{element}}</p>
