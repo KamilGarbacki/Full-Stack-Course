@@ -2,8 +2,10 @@ package com.kgarbacki.customer;
 
 import com.kgarbacki.jwt.JWTUtil;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -48,5 +50,19 @@ public class CustomerController {
     public void updateCustomer(@PathVariable("customerId") Long customerId,
                                @RequestBody CustomerUpdateRequest request) {
         customerService.updateCustomer(customerId, request);
+    }
+
+    @PostMapping(
+            value = "{customerId}/profile-image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public void uploadCustomerProfilePicture(@PathVariable("customerId") Long customerId,
+                                             @RequestParam("file") MultipartFile file) {
+        customerService.uploadCustomerProfileImage(customerId, file);
+    }
+
+    @GetMapping("{customerId}/profile-image")
+    public byte[] getCustomerProfilePicture(@PathVariable("customerId") Long customerId) {
+        return customerService.getCustomerProfileImage(customerId);
     }
 }

@@ -23,4 +23,6 @@ public interface CustomerDao {
     void updateCustomer(Customer update);
 
     Optional<Customer> selectUserByEmail(String email);
+
+    void updateCustomerProfileImageId(Long customerId, String profileImageId);
 }

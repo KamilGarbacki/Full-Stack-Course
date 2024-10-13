@@ -14,11 +14,16 @@ public class S3Config {
     @Value("${aws.region}")
     private String awsRegion;
 
+    @Value("${aws.s3.mock}")
+    private boolean mock;
+
     @Bean
     public S3Client S3Client() {
-        S3Client client = S3Client.builder()
+        if(mock){
+            return new FakeS3();
+        }
+       return S3Client.builder()
                 .region(Region.of(awsRegion))
                 .build();
-        return client;
     }
 }

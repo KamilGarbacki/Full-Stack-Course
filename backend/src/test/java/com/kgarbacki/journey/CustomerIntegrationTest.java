@@ -7,10 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.testcontainers.shaded.com.google.common.io.Files;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -78,7 +85,8 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
                 request.gender(),
                 request.age(),
                 List.of("ROLE_USER"),
-                request.email()
+                request.email(),
+                null
         );
 
         //make sure that customer is present
@@ -245,8 +253,9 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
                 updateRequest.gender(),
                 updateRequest.age(),
                 List.of("ROLE_USER"),
-                updateRequest.email()
-                );
+                updateRequest.email(),
+                null
+        );
 
         webTestClient.get()
                 .uri(CUSTOMER_PATH + "/{id}", id)
@@ -258,4 +267,105 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
                 .expectBody(new ParameterizedTypeReference<CustomerDTO>() {})
                 .isEqualTo(expectedCustomer);
     }
+
+    @Test
+    void canUploadAndDownloadProfilePicture() throws IOException {
+        String name = FAKER.name().firstName();
+        String email = name + UUID.randomUUID() + "@gmail.com";
+        int age = RANDOM.nextInt(16, 100) ;
+
+        CustomerRegistrationRequest request1 = new CustomerRegistrationRequest(
+                name, email, "password", age, Gender.MALE
+        );
+
+        CustomerRegistrationRequest request2 = new CustomerRegistrationRequest(
+                name, email + ".pl", "password", age, Gender.MALE
+        );
+
+        webTestClient.post()
+                .uri(CUSTOMER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(request1), CustomerRegistrationRequest.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        String jwtToken = webTestClient.post()
+                .uri(CUSTOMER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(request2), CustomerRegistrationRequest.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .returnResult(Void.class)
+                .getResponseHeaders()
+                .get(AUTHORIZATION)
+                .get(0);
+
+
+        List<CustomerDTO> allCustomers = webTestClient.get()
+                .uri(CUSTOMER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .header(AUTHORIZATION, "Bearer " + jwtToken)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(new ParameterizedTypeReference<CustomerDTO>() {})
+                .returnResult()
+                .getResponseBody();
+
+        CustomerDTO customerDTO = allCustomers
+                .stream()
+                .filter(customer -> customer.email().equals(email))
+                .findFirst()
+                .orElseThrow();
+
+        assertThat(customerDTO.profileImageId()).isNullOrEmpty();
+
+        Resource image = new ClassPathResource(
+                "%s.jpg".formatted(customerDTO.gender().name().toLowerCase())
+        );
+
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("file", image);
+
+         webTestClient.post()
+                 .uri(CUSTOMER_PATH + "/{customerId}/profile-image", customerDTO.id())
+                 .body(BodyInserters.fromMultipartData(bodyBuilder.build()))
+                 .header(AUTHORIZATION, "Bearer " + jwtToken)
+                 .exchange()
+                 .expectStatus()
+                 .isOk();
+
+         String profileImageId = webTestClient.get()
+                 .uri(CUSTOMER_PATH + "/{id}", customerDTO.id())
+                 .accept(MediaType.APPLICATION_JSON)
+                 .header(AUTHORIZATION, "Bearer " + jwtToken)
+                 .exchange()
+                 .expectStatus()
+                 .isOk()
+                 .expectBody(CustomerDTO.class)
+                 .returnResult()
+                 .getResponseBody()
+                 .profileImageId();
+
+         assertThat(profileImageId).isNotNull().isNotBlank();
+
+        byte[] downloadedImage = webTestClient.get()
+                .uri(CUSTOMER_PATH + "/{customerId}/profile-image", customerDTO.id())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(byte[].class)
+                .returnResult()
+                .getResponseBody();
+
+        byte[] actual = Files.toByteArray(image.getFile());
+
+        assertThat(actual).isEqualTo(downloadedImage);
+    }
+    //{customerId}/profile-imag
 }

@@ -1,6 +1,5 @@
 package com.kgarbacki.customer;
 
-import org.apache.catalina.mapper.Mapper;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
@@ -20,7 +19,8 @@ public class CustomerDTOMapper implements Function<Customer, CustomerDTO> {
                         .stream()
                         .map(r -> r.getAuthority())
                         .collect(Collectors.toList()),
-                customer.getUsername()
+                customer.getUsername(),
+                customer.getProfileImageId()
         );
     }
 }
