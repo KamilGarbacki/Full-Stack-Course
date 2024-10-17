@@ -153,6 +153,7 @@ public class CustomerService {
             );
         }
 
+
        return s3Service.getObject(
                 s3Buckets.getCustomer(),
                 "profile-images/%s/%s".formatted(customerId, customer.profileImageId())
