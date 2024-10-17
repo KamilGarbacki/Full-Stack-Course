@@ -12,7 +12,6 @@ import java.io.*;
 
 public class FakeS3 implements S3Client {
 
-
     private static final String PATH =
             System.getProperty("user.home") + "/.kgarbacki/s3";
 

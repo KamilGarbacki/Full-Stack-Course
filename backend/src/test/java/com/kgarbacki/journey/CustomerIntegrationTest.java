@@ -355,7 +355,7 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
 
         byte[] downloadedImage = webTestClient.get()
                 .uri(CUSTOMER_PATH + "/{customerId}/profile-image", customerDTO.id())
-                .accept(MediaType.APPLICATION_JSON)
+                .accept(MediaType.IMAGE_JPEG)
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -367,5 +367,4 @@ public class CustomerIntegrationTest extends AbstractTestcontainer {
 
         assertThat(actual).isEqualTo(downloadedImage);
     }
-    //{customerId}/profile-imag
 }

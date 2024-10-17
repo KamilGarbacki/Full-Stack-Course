@@ -52,7 +52,8 @@ public class Main {
         String email = name.toLowerCase() + age + "@gmail.com";
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 
-        Customer customer = new Customer(name, email, passwordEncoder.encode(UUID.randomUUID().toString()), age, gender);
+        Customer customer = new Customer(name, email, passwordEncoder.encode("password"), age, gender);
         customerRepository.save(customer);
+        System.out.println("Customer created: " + customer);
     }
 }

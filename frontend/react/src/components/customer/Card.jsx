@@ -13,6 +13,7 @@ import {
 import React from "react";
 import {ConfirmationPopUp} from "./AlterDialog.jsx";
 import EditCustomerDrawerForm from "./EditCustomerDrawer.jsx";
+import {customerProfilePictureUrl} from "../../services/client.js";
 
 export default function CardWithImage({id, name, email, age, gender, imageNumber, fetchCustomers}) {
     const randomUserGander = gender === "MALE" ? "men" : "women";
@@ -37,7 +38,7 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
                     <Avatar
                         size={'xl'}
                         src={
-                            `https://randomuser.me/api/portraits/${randomUserGander}/${imageNumber}.jpg`
+                            customerProfilePictureUrl(id)
                         }
                         alt={'Author'}
                         css={{

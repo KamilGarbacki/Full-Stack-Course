@@ -1,0 +1,10 @@
+aws:
+  region: eu-north-1
+  s3:
+    mock: false
+
+spring:
+  datasource:
+    url: jdbc:postgresql://awseb-e-jnmraaf34x-stack-awsebrdsdatabase-cwnsygmlji4t.cx6wsoeaqf8l.eu-north-1.rds.amazonaws.com:5432/ebdb
+    username: kamil
+    password: password
