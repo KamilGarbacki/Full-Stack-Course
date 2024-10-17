@@ -72,7 +72,8 @@ export const EditCustomerForm = ({initialValues, fetchCustomers }) => {
                     src={customerProfilePictureUrl(initialValues.id)}
                 />
                 <MyDropzone id={initialValues.id}
-                            fetchCustomers={fetchCustomers}/>
+                            fetchCustomers={fetchCustomers}
+                />
             </VStack>
             <Formik
                 initialValues={{
